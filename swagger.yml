@@ -1,0 +1,359 @@
+openapi: 3.0.0
+info:
+  description: A wrapper over GitHub API to automate some tasks  
+  version: "1.0.0"
+  title: GitHub-API Wrapper
+  contact:
+    email: raghhavdturki@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - description: Development Server
+    url: http://localhost:3000/api/v1/
+  - description: Production Server
+    url: https://githubapiwrapper.herokuapp.com/api/v1
+paths:
+  /repository/create:
+    post:
+      tags:
+        - repository
+      summary: Create Repository
+      requestBody:
+        $ref: '#/components/requestBodies/CreateRepositoryInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repository Created Successfully
+  /repository/list:
+    post:
+      tags:
+        - repository
+      summary: List Repositories
+      requestBody:
+        $ref: '#/components/requestBodies/ListRepositoryInput' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repositories List
+  /repository/topics/list:
+    post:
+      tags:
+        - repository
+      summary: List Repository Topics
+      requestBody:
+        $ref: '#/components/requestBodies/ListRepoTopicsInput' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repository Topics List
+  /repository/topics/update:
+    post:
+      tags:
+        - repository
+      summary: Update Repository Topics
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateRepoTopicsInput' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repository Topics Updated Successfully
+  /repository/topics/delete:
+    post:
+      tags:
+        - repository
+      summary: Delete Repository Topics
+      requestBody:
+        $ref: '#/components/requestBodies/DeleteRepoTopicsInput' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repository Topics Deleted Successfully
+  /repository/contributors:
+    post:
+      tags:
+        - repository
+      summary: List Repository Contributors
+      requestBody:
+        $ref: '#/components/requestBodies/GetContributorsAndStargazersInput' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repository Contributors List
+  /repository/stargazers:
+    post:
+      tags:
+        - repository
+      summary: List Repository Stargazers
+      requestBody:
+        $ref: '#/components/requestBodies/GetContributorsAndStargazersInput' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repository Stargazers List
+  /repository/with5starsand5forks:
+    post:
+      tags:
+        - repository
+      summary: List Repositories with 5 stars and 5 forks
+      requestBody:
+        $ref: '#/components/requestBodies/ListRepositoriesWith5StarsAnd5ForksInput' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repositories List
+  /repository/commitsByOwner:
+    post:
+      tags:
+        - repository
+      summary: List Repository with more than 5 Commits By Owner in past 10 days
+      requestBody:
+        $ref: '#/components/requestBodies/GetCommitFrequency' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Repositories with more than 5 Commits By Owner in past 10 days
+  /repository/commitsByAnyone:
+    post:
+      tags:
+        - repository
+      summary: List all the repos of a given user with > 5 commits in last 10 days
+      requestBody:
+        $ref: '#/components/requestBodies/GetCommitFrequency' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: List all the repos of a given user with > 5 commits in last 10 days
+  /repository/starGazersWithMoreThan2Stars:
+    post:
+      tags:
+        - repository
+      summary: List all the stargazers who have starred more than 2 repos of a given user
+      requestBody:
+        $ref: '#/components/requestBodies/GetStargazersWithMoreThan2Stars' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: List all the stargazers who have starred more than 2 repos of a given user
+  /repository/stargazersWithExactly2Stars:
+    post:
+      tags:
+        - repository
+      summary: List all the stargazers who have starred exactly 2 repos of a given user
+      requestBody:
+        $ref: '#/components/requestBodies/GetStargazersWithExactly2Stars' 
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: List all the stargazers who have starred exactly 2 repos of a given user
+components:
+  schemas:
+    CreateRepositoryInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        visibility:
+          type: string
+      required: 
+        - name
+    ListRepositoryInput:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+        - username
+    ListRepoTopicsInput:
+      type: object
+      properties:
+        username:
+          type: string
+        repo_name: 
+          type: string
+      required:
+        - username
+        - repo_name
+    DeleteRepoTopicsInput:
+      type: object
+      properties:
+        username:
+          type: string
+        repo_name:
+          type: string
+        topic:
+          type: array
+          items:
+            type: string
+      required:
+        - username
+        - repo_name
+        - topic_name
+    UpdateRepoTopicsInput:
+      type: object
+      properties:
+        username:
+          type: string
+        repo_name:
+          type: string
+        topic:
+          type: array
+          items:
+            type: string
+      required:
+        - username
+        - repo_name
+        - topic_name
+    GetContributorsAndStargazersInput:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+        - username
+    GetCommitFrequency:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+        - username
+    GetStargazersWithMoreThan2Stars:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+        - username
+    GetStargazersWithExactly2Stars:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+        - username
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Github Token
+  requestBodies:
+    CreateRepositoryInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateRepositoryInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/CreateRepositoryInput'
+      required: true
+    ListRepositoryInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ListRepositoryInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ListRepositoryInput'
+      required: true
+    ListRepoTopicsInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ListRepoTopicsInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ListRepoTopicsInput'
+      required: true
+    DeleteRepoTopicsInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteRepoTopicsInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/DeleteRepoTopicsInput'
+      required: true
+    UpdateRepoTopicsInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateRepoTopicsInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/UpdateRepoTopicsInput'
+      required: true
+    GetContributorsAndStargazersInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetContributorsAndStargazersInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/GetContributorsAndStargazersInput'
+      required: true
+    GetCommitFrequency:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCommitFrequency'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/GetCommitFrequency'
+      required: true
+    GetStargazersWithMoreThan2Stars:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetStargazersWithMoreThan2Stars'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/GetStargazersWithMoreThan2Stars'
+      required: true
+    GetStargazersWithExactly2Stars:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetStargazersWithExactly2Stars'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/GetStargazersWithExactly2Stars'
+      required: true
